@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario usando Fetch</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>3. HTML + PHP usando Fetch API</h1>
+        <p class="subtitle">
+            Este archivo es HTML. JavaScript envía la información a procesar.php sin recargar la página.
+        </p>
+
+        <form id="formEstudiante">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="correo">Correo</label>
+                    <input type="email" id="correo" name="correo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="curso">Curso</label>
+                    <select id="curso" name="curso" required>
+                        <option value="">Seleccione...</option>
+                        <option value="PHP y MySQL">PHP y MySQL</option>
+                        <option value="Programación Web">Programación Web</option>
+                        <option value="Bases de Datos">Bases de Datos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edad">Edad</label>
+                    <input type="number" id="edad" name="edad" min="1" max="120">
+                </div>
+
+            </div>
+
+            <div class="actions">
+                <button type="submit">Enviar con Fetch</button>
+                <a class="btn secondary" href="../">Volver</a>
+            </div>
+        </form>
+
+        <div id="mensaje"></div>
+    </div>
+</div>
+
+<script>
+const formulario = document.getElementById("formEstudiante");
+const mensaje = document.getElementById("mensaje");
+
+formulario.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    mensaje.innerHTML = '<div class="alert">Enviando datos...</div>';
+
+    const datosFormulario = new FormData(formulario);
+
+    try {
+        const respuesta = await fetch("procesar.php", {
+            method: "POST",
+            body: datosFormulario
+        });
+
+        const datos = await respuesta.json();
+
+        if (datos.ok) {
+            mensaje.innerHTML =
+                `<div class="alert success">${datos.mensaje}</div>`;
+
+            formulario.reset();
+        } else {
+            mensaje.innerHTML =
+                `<div class="alert error">${datos.mensaje}</div>`;
+        }
+
+    } catch (error) {
+        mensaje.innerHTML =
+            '<div class="alert error">No se pudo comunicar con el servidor.</div>';
+
+        console.error(error);
+    }
+});
+</script>
+</body>
+</html>
