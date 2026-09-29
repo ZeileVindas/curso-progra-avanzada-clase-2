@@ -1,10 +1,10 @@
 <?php
 
 // Datos de conexión.
-$host = "add";
-$usuario = "add";
+$host = "localhost";
+$usuario = "root";
 $contrasena = "";
-$base_datos = "add";
+$base_datos = "mi_sitio_web";
 
 // Crear conexión usando MySQLi.
 $conn = mysqli_connect($host, $usuario, $contrasena, $base_datos);
